@@ -1,0 +1,3 @@
+for i in range(4):
+    print('execute store success score #enchant_removed' + str(i * 2 + 73) + ' vars run data remove block ~ 255 ~ Items[{Slot:' + str(i) + 'b}].tag.Enchantments[{id:"minecraft:unbreaking"}]')
+    print('execute store success score #enchant_removed' + str(i * 2 + 74) + ' vars run data remove block ~ 255 ~ Items[{Slot:' + str(i) + 'b}].tag.StoredEnchantments[{id:"minecraft:unbreaking"}])')
