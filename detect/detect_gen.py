@@ -1,6 +1,7 @@
 """
 Generates the ONE detect/detect.mcfunction method.
 """
+from util import writer
 from words.word_settings import word_file
 
 # Setup word / synonym list
@@ -30,6 +31,5 @@ full += '\n\n# If no GLOBAL word submitted, we know the entry was not accepted, 
 full += '\nexecute unless score #word_submitted vars matches 1 unless score @s word_submitted matches 0 run clear @s minecraft:writable_book{Wordsmith:1b}'
 
 
-rb = open('/data/wordsmith/functions/detect/detect.mcfunction', 'w')
-rb.write(full)
-rb.close()
+# Write the file
+writer.write(full, f'datapacks/Wordsmith/data/wordsmith/functions/detect/detect.mcfunction')
