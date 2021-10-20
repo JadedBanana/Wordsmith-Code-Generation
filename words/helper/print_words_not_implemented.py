@@ -1,15 +1,17 @@
-from words import words_en
 import os
+from words.word_settings import word_file
 
-worddict = words_en.words
+# Setup word list
+word_list = word_file.words
+
 
 def remove_numbers(word):
     for i in '0123456789':
         word = word.strip(i)
     return word
 
-for word in worddict:
-    for entry in worddict[word]:
+for word in word_list:
+    for entry in word_list[word]:
         if 'group' in entry:
             if os.path.isfile(os.path.join('C:/Users/popki/AppData/Roaming/.minecraft/saves/Wordsmith/datapacks/Wordsmith/data/wordsmith/functions/detect/blanket', entry['group'] + '.mcfunction')):
                 continue
