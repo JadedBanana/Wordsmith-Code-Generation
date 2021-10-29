@@ -231,4 +231,4 @@ for entry in word_list:
             full += '\n\n# Do all of that again\n' + full.replace('~10', '~12')
 
         # Write.
-        writer.write(full, 'datapacks/Wordsmith/data/wordsmith/functions/detect/block/drop/{}.mcfunction'.format(entry2['block'].replace(' ', '_').replace('\'', '_')))
+        writer.write(full, 'datapacks/Wordsmith/data/wordsmith/functions/detect/block/{}2.mcfunction'.format(entry2['block'].replace(' ', '_').replace('\'', '_')))
