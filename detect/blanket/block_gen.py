@@ -1,8 +1,10 @@
-from words import words_en
+
+from util import writer
+from words.word_settings import word_file
 import os
-import sys
 import json
-word_list = words_en.words
+
+word_list = word_file.words
 
 # Definition of recursive method
 def get_recursive_blocklist(blocks):
@@ -16,7 +18,7 @@ def get_recursive_blocklist(blocks):
                         blocks2.append(block2)
             else:
                 print('HASHTAG IN GROUP ' + group + ' WITH NO LINKAGE')
-                sys.exit(-1)
+                exit(-1)
             blocks2.remove(block)
     return blocks2
 
@@ -42,7 +44,7 @@ for group in word_list2:
         except json.decoder.JSONDecodeError as e:
             print(group)
             print(e)
-            sys.exit(-1)
+            exit(-1)
 
         blocks = get_recursive_blocklist(tag_list2['values'])
 
