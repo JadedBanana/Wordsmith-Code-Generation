@@ -22,6 +22,22 @@ def get_recursive_blocklist(blocks):
             blocks2.remove(block)
     return blocks2
 
+# Definition of recursive method 2
+def get_recursive_itemlist(items):
+    items2 = items
+    for item in items:
+        if '#' in item:
+            if item.startswith('#wordsmith:'):
+                tag_list3 = json.load(open(os.path.join('C:/Users/popki/AppData/Roaming/.minecraft/saves/Wordsmith/datapacks/Wordsmith/data/wordsmith/tags/items', item[11:] + '.json'), 'r'))
+                for item2 in get_recursive_itemlist(tag_list3['values']):
+                    if item2 not in items2:
+                        items2.append(item2)
+            else:
+                print('HASHTAG IN GROUP ' + group + ' WITH NO LINKAGE')
+                exit(-1)
+            items2.remove(item)
+    return items2
+
 # Get list of groups
 word_list2 = []
 for entry in word_list:
@@ -35,18 +51,21 @@ for entry in word_list:
             if name not in word_list2:
                 word_list2.append(entry2['group'])
 
-# Of groups, check for block tags
-tag_list = os.listdir('C:/Users/popki/AppData/Roaming/.minecraft/saves/Wordsmith/datapacks/Wordsmith/data/wordsmith/tags/blocks')
+# Of groups, check for block tags and item tags
+tag_list_block = os.listdir('C:/Users/popki/AppData/Roaming/.minecraft/saves/Wordsmith/datapacks/Wordsmith/data/wordsmith/tags/blocks')
+tag_list_item = os.listdir('C:/Users/popki/AppData/Roaming/.minecraft/saves/Wordsmith/datapacks/Wordsmith/data/wordsmith/tags/items')
 for group in word_list2:
-    if group + '.json' in tag_list:
+    if group + '.json' in tag_list_block and group + '_blocklist.json' in tag_list_item:
         try:
-            tag_list2 = json.load(open(os.path.join('C:/Users/popki/AppData/Roaming/.minecraft/saves/Wordsmith/datapacks/Wordsmith/data/wordsmith/tags/blocks', group + '.json'), 'r'))
+            tag_list_block2 = json.load(open(os.path.join('C:/Users/popki/AppData/Roaming/.minecraft/saves/Wordsmith/datapacks/Wordsmith/data/wordsmith/tags/blocks', group + '.json'), 'r'))
+            tag_list_item2 = json.load(open(os.path.join('C:/Users/popki/AppData/Roaming/.minecraft/saves/Wordsmith/datapacks/Wordsmith/data/wordsmith/tags/items', group + '_blocklist.json'), 'r'))
         except json.decoder.JSONDecodeError as e:
             print(group)
             print(e)
             exit(-1)
 
-        blocks = get_recursive_blocklist(tag_list2['values'])
+        blocks = get_recursive_blocklist(tag_list_block2['values'])
+        items = get_recursive_blocklist(tag_list_item2['values'])
 
         function = '# Kill commands\n'
         for i in range(len(blocks)):
@@ -70,8 +89,13 @@ for group in word_list2:
         function += 'execute store result score #blocks_replaced15 vars run fill ~-22 224 ~-22 ~22 239 ~22 air replace #wordsmith:' + group + '\n'
         function += 'execute store result score #blocks_replaced16 vars run fill ~-22 240 ~-22 ~22 255 ~22 air replace #wordsmith:' + group + '\n'
         function += '\n# Clear command\n'
-        function += 'execute store result score #blocks_cleared vars run clear @a[scores={deaths=0}] #wordsmith:sponge\n'
+        function += 'execute store result score #blocks_cleared vars run clear @a[scores={deaths=0}] #wordsmith:' + group + '_blocklist\n'
+        function += '\n# Set scoreboard value of whether or not blocks were deleted\n'
+        function += 'scoreboard players set #group_blocks_deleted vars 1\n'
+        function += 'execute '
+        for i in range(len(blocks)):
+            function += 'if score # blocks_killed{} vars matches 0 '.format(2*i+1)
+            function += 'if score # blocks_killed{} vars matches 0 '.format(2*i+2)
+        function += 'if score #blocks_replaced1 vars matches 0 if score #blocks_replaced2 vars matches 0 if score #blocks_replaced3 vars matches 0 if score #blocks_replaced4 vars matches 0 if score #blocks_replaced5 vars matches 0 if score #blocks_replaced6 vars matches 0 if score #blocks_replaced7 vars matches 0 if score #blocks_replaced8 vars matches 0 if score #blocks_replaced9 vars matches 0 if score #blocks_replaced10 vars matches 0 if score #blocks_replaced11 vars matches 0 if score #blocks_replaced12 vars matches 0 if score #blocks_replaced13 vars matches 0 if score #blocks_replaced14 vars matches 0 if score #blocks_replaced15 vars matches 0 if score #blocks_replaced16 vars matches 0 if score #blocks_cleared vars matches 0 run scoreboard players set #group_blocks_deleted vars 0'
 
-        rb = open('C:/Users/popki/AppData/Roaming/.minecraft/saves/Wordsmith/datapacks/Wordsmith/data/wordsmith/functions/detect/blanket/block/{}.mcfunction'.format(group), 'w')
-        rb.write(function)
-        rb.close()
+        writer.write(function, 'datapacks/Wordsmith/data/wordsmith/functions/detect/blanket/block/{}.mcfunction'.format(group))
