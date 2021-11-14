@@ -66,9 +66,13 @@ for entry in word_list:
         if 'drop_as' not in entry2:
             continue
         if type(entry2['drop_as']) is tuple:
+            function_line = 'scoreboard players operation #curr_{}_spawning_density vars = #{}_spawning_density vars\n'.format(entry2['drop_as'][0], entry2['drop_as'][0]) + function_line
             function_line += 'run schedule function wordsmith:detect/{}/{}2 1t'.format(entry2['drop_as'][0], entry2['drop_as'][1])
         else:
             function_line += 'run schedule function wordsmith:detect/block/{}_2 1t'.format(entry2['group'])
+
+        # Modify the start of the function_line to have a comment.
+        function_line = '# If block not replaced, summon some\n' + function_line
 
         # Write.
         writer.write(first_half + function_line, 'datapacks/Wordsmith/data/wordsmith/functions/detect/blanket/{}.mcfunction'.format(entry2['group']))
