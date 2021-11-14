@@ -65,12 +65,16 @@ for group in word_list2:
             exit(-1)
 
         blocks = get_recursive_blocklist(tag_list_block2['values'])
-        items = get_recursive_blocklist(tag_list_item2['values'])
+        items = get_recursive_itemlist(tag_list_item2['values'])
 
         function = '# Kill commands\n'
-        for i in range(len(blocks)):
-            function += 'execute store result score #blocks_killed' + str(2*i+1) + ' vars run kill @e[type=minecraft:item,nbt={Item:{id:"' + blocks[i] + '"}}]\n'
-            function += 'execute store result score #blocks_killed' + str(2*i+2) + ' vars run kill @e[type=minecraft:falling_block,nbt={BlockState:{Name:"' + blocks[i] + '"}}]\n'
+        score_num = 1
+        for block in blocks:
+            if block in items:
+                function += 'execute store result score #blocks_killed' + str(score_num) + ' vars run kill @e[type=minecraft:item,nbt={Item:{id:"' + block + '"}}]\n'
+                score_num += 1
+            function += 'execute store result score #blocks_killed' + str(score_num) + ' vars run kill @e[type=minecraft:falling_block,nbt={BlockState:{Name:"' + block + '"}}]\n'
+            score_num += 1
         function += '\n# Fill commands\n'
         function += 'execute store result score #blocks_replaced1 vars run fill ~-22 0 ~-22 ~22 15 ~22 air replace #wordsmith:' + group + '\n'
         function += 'execute store result score #blocks_replaced2 vars run fill ~-22 16 ~-22 ~22 31 ~22 air replace #wordsmith:' + group + '\n'
@@ -93,9 +97,13 @@ for group in word_list2:
         function += '\n# Set scoreboard value of whether or not blocks were deleted\n'
         function += 'scoreboard players set #group_blocks_deleted vars 1\n'
         function += 'execute '
-        for i in range(len(blocks)):
-            function += 'if score # blocks_killed{} vars matches 0 '.format(2*i+1)
-            function += 'if score # blocks_killed{} vars matches 0 '.format(2*i+2)
+        score_num = 1
+        for block in blocks:
+            if block in items:
+                function += 'if score #blocks_killed{} vars matches 0 '.format(score_num)
+                score_num += 1
+            function += 'if score #blocks_killed{} vars matches 0 '.format(score_num)
+            score_num += 1
         function += 'if score #blocks_replaced1 vars matches 0 if score #blocks_replaced2 vars matches 0 if score #blocks_replaced3 vars matches 0 if score #blocks_replaced4 vars matches 0 if score #blocks_replaced5 vars matches 0 if score #blocks_replaced6 vars matches 0 if score #blocks_replaced7 vars matches 0 if score #blocks_replaced8 vars matches 0 if score #blocks_replaced9 vars matches 0 if score #blocks_replaced10 vars matches 0 if score #blocks_replaced11 vars matches 0 if score #blocks_replaced12 vars matches 0 if score #blocks_replaced13 vars matches 0 if score #blocks_replaced14 vars matches 0 if score #blocks_replaced15 vars matches 0 if score #blocks_replaced16 vars matches 0 if score #blocks_cleared vars matches 0 run scoreboard players set #group_blocks_deleted vars 0'
 
         writer.write(function, 'datapacks/Wordsmith/data/wordsmith/functions/detect/blanket/block/{}.mcfunction'.format(group))
