@@ -347,7 +347,7 @@ words = {
 	'red wool': [{'block': 'red_wool'}],
 	'black wool': [{'block': 'black_wool'}],
 	'wool': [{'group': 'wool', 'prereq': ['block']}],
-	'impermeable blocks': [{'group': 'impermeables', 'prereq': ['blocks']}],
+	'impermeable blocks': [{'group': 'impermeables', 'prereq': ['block']}],
 	'lapis lazuli ore': [{'block': 'lapis_ore'}],
 	'lapis lazuli block': [{'block': 'lapis_block'}],
 	'dispenser': [{'block': 'dispenser', 'directional_tag': 'facing'}],
