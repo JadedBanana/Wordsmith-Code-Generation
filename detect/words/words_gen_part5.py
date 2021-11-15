@@ -52,25 +52,25 @@ for entry in word_list:
     else:
         # Block
         if 'block' in word_list[entry][0]:
-            full += '\nfunction wordsmith:detect/block/{}'.format(word_list[entry][i]['block'])
+            full += '\nfunction wordsmith:detect/block/{}'.format(word_list[entry][0]['block'])
         # Item
         elif 'item' in word_list[entry][0]:
-            full += '\nfunction wordsmith:detect/item/{}'.format(word_list[entry][i]['item'])
+            full += '\nfunction wordsmith:detect/item/{}'.format(word_list[entry][0]['item'])
         # Entity
         elif 'entity' in word_list[entry][0]:
-            full += '\nfunction wordsmith:detect/entity/{}'.format(word_list[entry][i]['entity'])
+            full += '\nfunction wordsmith:detect/entity/{}'.format(word_list[entry][0]['entity'])
         # Meta
         elif 'meta' in word_list[entry][0]:
-            full += '\nfunction wordsmith:detect/meta/{}'.format(word_list[entry][i]['meta'])
+            full += '\nfunction wordsmith:detect/meta/{}'.format(word_list[entry][0]['meta'])
         # World
         elif 'world' in word_list[entry][0]:
-            full += '\nfunction wordsmith:detect/world/{}'.format(word_list[entry][i]['world'])
+            full += '\nfunction wordsmith:detect/world/{}'.format(word_list[entry][0]['world'])
         # Blanket (group)
         elif 'group' in word_list[entry][0]:
-            full += '\nfunction wordsmith:detect/blanket/{}'.format(word_list[entry][i]['group'])
+            full += '\nfunction wordsmith:detect/blanket/{}'.format(word_list[entry][0]['group'])
     # End the turn.
     full += '\n\n# Run the function that ends turns'
     full += '\nfunction wordsmith:turn/end_turn_word_get'
     
     # Write
-    writer.write(full, 'datapacks/Wordsmith/data/wordsmith/functions/detect/words/{}4.mcfunction'.format(entry.replace(' ', '_').replace('\'', '_')))
+    writer.write(full, 'datapacks/Wordsmith/data/wordsmith/functions/detect/words/{}5.mcfunction'.format(entry.replace(' ', '_').replace('\'', '_')))
